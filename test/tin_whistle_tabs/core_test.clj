@@ -1,7 +1,12 @@
 (ns tin-whistle-tabs.core-test
-  (:use clojure.test
-        tin-whistle-tabs.core))
+  (:use [midje.sweet]
+        [tin-whistle-tabs.core]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(fact "addition has a unit element"
+      (+ 12345 0) => 12345)
+
+(fact "checking basic arithmetic"
+      (+ 1 2) => 3
+      (- 5 3) => 2
+      (* 3 4) => 12
+      (/ 16 2) => 8)

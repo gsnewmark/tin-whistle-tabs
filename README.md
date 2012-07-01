@@ -1,35 +1,14 @@
 # tin-whistle-tabs
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+A GUI tool that generates a tin whistle fingering charts for the given
+musical notes.
 
 ## Usage
 
-FIXME: explanation
+Start a program using the following command:
 
     $ java -jar tin-whistle-tabs-0.1.0-standalone.jar [args]
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
-
-Copyright © 2012 FIXME
 
 Distributed under the Eclipse Public License, the same as Clojure.
