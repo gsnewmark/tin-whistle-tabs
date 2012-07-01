@@ -15,24 +15,27 @@
 
 ;; ## Declarations
 (declare notes->vectors)
+(declare no-such-note-error)
 
 ;; ## Note transformation API
 
-;; TODO 'sad' path - raise an exception
 (defn transform-note
-  "Transforms a given note to a transitional format. Note could be a keyword or a string."
+  "Transforms a given note to a transitional format. Note could be a keyword or a string. Throws an IllegalArgumentException if argument is an unsupported note."
   [note]
-  (notes->vectors (keyword note)))
+  (if-let [note-fingering (notes->vectors (keyword note))]
+    note-fingering
+    (throw (IllegalArgumentException. no-such-note-error))))
 
 (defn transform-notes
-  "Transforms every note in a given sequence to a transitional format."
+  "Transforms every note in a given sequence to a transitional format. Unsupported notes are transformed to empty lists."
   [notes]
-  (map transform-note notes))
+  (map #(try
+          (transform-note %)
+          (catch IllegalArgumentException e []))
+       notes))
 
 ;; ## Fingering chart
 
-;; TODO remove +\- from fingering, find it from note's capitalization
-;; TODO remove fingerings for high octave
 ;; Map with the pairs "note - its fingering".
 (def notes->vectors
   {:D    [:x :x :x :x :x :x :-]
@@ -43,7 +46,7 @@
    :B    [:x :o :o :o :o :o :-]
    :C    [:o :x :x :o :o :o :-]
    :C#   [:o :o :o :o :o :o :-]
-   :d    [:x :x :x :x :x :x :+]
+   :d    [:o :x :x :x :x :x :+]
    :e    [:x :x :x :x :x :o :+]
    :f#   [:x :x :x :x :o :o :+]
    :g    [:x :x :x :o :o :o :+]
@@ -51,3 +54,6 @@
    :b    [:x :o :o :o :o :o :+]
    :c    [:o :x :x :o :o :o :+]
    :c#   [:o :o :o :o :o :o :+]})
+
+;; Message for an unsupported notes.
+(def no-such-note-error "Not a note.")

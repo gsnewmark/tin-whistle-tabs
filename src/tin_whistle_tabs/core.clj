@@ -6,6 +6,7 @@
 
 ;; ## Interface declarations
 
+(declare title)
 (declare cli-interface)
 
 ;; ## Program's entry point
@@ -13,19 +14,22 @@
 (defn -main
   "Starts a user interface of a tool."
   [& args]
-  (println "Tin Whistle (D) fingering chart")
-  (cli-interface args))
+  (println (str title (cli-interface args))))
 
 ;; ## Interface implementation
 
+;; Title of an app.
+(def title "Tin Whistle (D) fingering chart\n")
+
 (defn cli-interface
-  "Transforms a given list of notes to a corresponding fingerings and prints them."
+  "Transforms a given list of notes to a string with the corresponding fingerings."
   [notes]
-  (println
-   (apply str
-          (interpose "\n"
-                     (map
-                      #(format "%-2s - %s" (first %) (last %))
-                      (partition 2
-                                 (interleave notes
-                                             (api/transform-notes notes))))))))
+  (->> (api/transform-notes notes)
+       (map #(if (empty? %) api/no-such-note-error %))
+       (interleave notes)
+       (partition 2)
+       (map #(format "%-2s - %s" (first %) (last %)))
+       (interpose "\n")
+       (apply str)))
+
+
