@@ -10,12 +10,14 @@
 ;; whether the user must overblow (if not - :-, else - :+).
 ;;
 ;; For example, F# would be represented as a [:x :x :x :x :o :o :-].
-(ns tin-whistle-tabs.transformation-api)
+(ns tin-whistle-tabs.transformation-api
+  (:require [clojure.string :as string]))
 
 
 ;; ## Declarations
 (declare notes->vectors)
 (declare no-such-note-error)
+(declare extract-notes)
 
 ;; ## Note transformation API
 
@@ -35,12 +37,21 @@
        notes))
 
 ;; TODO take key of tune into account (insert sharps where required)
+;; TODO correctly process sharps (more than a character)
 ;; TODO take bars into account
 ;; TODO take duration into account
 (defn abc->tab
   "Creates a list with tabs for a given string with an ABC notation of a tune."
   [abc]
-  ())
+  (when-not (nil? abc)
+    ; extract a sequence of strings each of which is a letter that
+    ; corresponds to a note
+    (let [notes-seq
+          (map str
+           (-> (extract-notes abc)              ; extract notes part
+               (string/replace #"[^a-zA-Z]" "") ; leave only letters-notes
+               seq))]                           ; create sequence of characters
+      (transform-notes notes-seq))))
 
 ;; ## Fingering chart
 
@@ -65,3 +76,12 @@
 
 ;; Message for an unsupported notes.
 (def no-such-note-error "Not a note.")
+
+;; ## Utility functions
+
+(defn extract-notes
+  "Extracts a string with a notes part from an ABC tune notation."
+  [abc]
+  (when-not (nil? abc)
+    ; in ABC notation notes start after the line with K: ...
+    (last (string/split abc #"K:.*\n"))))

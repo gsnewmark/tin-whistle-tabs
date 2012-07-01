@@ -8,6 +8,9 @@
 ;; Title of an app.
 (def title "Tin Whistle (D) fingering chart\n")
 
+;; Text for blank input.
+(def blank-input-message "Blank input.")
+
 ;; ## CLI
 
 (declare get-cli-answer)
@@ -17,8 +20,10 @@
   ([notes transformed-notes]
      (cli notes transformed-notes nil))
   ([notes transformed-notes default-tab]
-     (println
-      (str title (get-cli-answer notes transformed-notes default-tab)))))
+     (if-not (or (nil? notes) (nil? transformed-notes))
+      (println
+       (str title (get-cli-answer notes transformed-notes default-tab)))
+      (println blank-input-message))))
 
 (defn get-cli-answer
   "Transforms a given list of notes to a string with the corresponding fingerings. Arguments are a list of non-transformed notes, a list of transformed notes and a default tab (to use with an unsupported note). If default tab is nil, uses a fingering from transformed-notes (empty vector)."

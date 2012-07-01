@@ -62,7 +62,7 @@
          ["c" "k"]      [[:o :x :x :o :o :o :+] []]
          ["g" "H" "G"]  [[:x :x :x :o :o :o :+] [] [:x :x :x :o :o :o :-]])
 
-;; Tests for a abc->tab
+;; Tests for a abc->tab transformation
 ;; ABC is from http://www.thesession.org/tunes/display/10#abc
 (against-background
  [(around :contents
@@ -74,6 +74,10 @@
                      "R: slip jig\n"
                      "K: Emin\n"
                      "|:B2E G2E F3|B2E G2E FED|B2E G2E F3|B2d d2B AFD:|\n"
+                     "|:B2d e2f g3|B2d g2e dBA|B2d e2f g2a|b2a g2e dBA:|\n"
+                     "|:B3 B2A G2A|B3 BAB dBA|B3 B2A G2A|B2d g2e dBA:|")
+                butterfly-abc-notes
+                (str "|:B2E G2E F3|B2E G2E FED|B2E G2E F3|B2d d2B AFD:|\n"
                      "|:B2d e2f g3|B2d g2e dBA|B2d e2f g2a|b2a g2e dBA:|\n"
                      "|:B3 B2A G2A|B3 BAB dBA|B3 B2A G2A|B2d g2e dBA:|")
                 butterfly-tab
@@ -112,6 +116,8 @@
                  [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
                  [:x :x :o :o :o :o :-]]]
             ?form))]
+ (fact "extract notes part from an abc notation"
+       (api/extract-notes butterfly-abc) => butterfly-abc-notes)
  (fact "transform butterfly tune abc notation to a transitional format (vector)"
        (api/abc->tab butterfly-abc) => butterfly-tab))
 
