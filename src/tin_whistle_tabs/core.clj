@@ -1,7 +1,8 @@
 ;; ## Main tool's namespace
 (ns tin-whistle-tabs.core
   (:require [tin-whistle-tabs.transformation-api :as api]
-            [tin-whistle-tabs.interface :as ui]))
+            [tin-whistle-tabs.interface :as ui])
+  (:gen-class))
 
 
 ;; ## Program's entry point

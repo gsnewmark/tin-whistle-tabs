@@ -34,6 +34,14 @@
           (catch IllegalArgumentException e []))
        notes))
 
+;; TODO take key of tune into account (insert sharps where required)
+;; TODO take bars into account
+;; TODO take duration into account
+(defn abc->tab
+  "Creates a list with tabs for a given string with an ABC notation of a tune."
+  [abc]
+  ())
+
 ;; ## Fingering chart
 
 ;; Map with the pairs "note - its fingering".

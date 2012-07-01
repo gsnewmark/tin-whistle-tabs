@@ -62,13 +62,67 @@
          ["c" "k"]      [[:o :x :x :o :o :o :+] []]
          ["g" "H" "G"]  [[:x :x :x :o :o :o :+] [] [:x :x :x :o :o :o :-]])
 
+;; Tests for a abc->tab
+;; ABC is from http://www.thesession.org/tunes/display/10#abc
+(against-background
+ [(around :contents
+          (let [butterfly-abc
+                (str "X: 1"
+                     "T: Butterfly, The\n"
+                     "M: 9/8\n"
+                     "L: 1/8\n"
+                     "R: slip jig\n"
+                     "K: Emin\n"
+                     "|:B2E G2E F3|B2E G2E FED|B2E G2E F3|B2d d2B AFD:|\n"
+                     "|:B2d e2f g3|B2d g2e dBA|B2d e2f g2a|b2a g2e dBA:|\n"
+                     "|:B3 B2A G2A|B3 BAB dBA|B3 B2A G2A|B2d g2e dBA:|")
+                butterfly-tab
+                [[:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
+                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
+                 [:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
+                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
+                 [:x :x :x :x :x :o :-] [:x :x :x :x :x :x :-]
+                 [:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
+                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
+                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
+                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-] [] [:x :x :x :x :x :x :-]
+                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
+                 [:x :x :x :x :x :o :+] [] [:x :x :x :o :o :o :+]
+                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
+                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
+                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
+                 [:o :x :x :x :x :x :+] [:x :x :x :x :x :o :+] []
+                 [:x :x :x :o :o :o :+] [:x :x :o :o :o :o :+]
+                 [:x :o :o :o :o :o :+] [:x :x :o :o :o :o :+]
+                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
+                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
+                 [:x :o :o :o :o :o :-] [:x :x :o :o :o :o :-]
+                 [:x :x :x :o :o :o :-] [:x :x :o :o :o :o :-]
+                 [:x :o :o :o :o :o :-] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
+                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
+                 [:x :o :o :o :o :o :-] [:x :x :o :o :o :o :-]
+                 [:x :x :x :o :o :o :-] [:x :x :o :o :o :o :-]
+                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
+                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
+                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
+                 [:x :x :o :o :o :o :-]]]
+            ?form))]
+ (fact "transform butterfly tune abc notation to a transitional format (vector)"
+       (api/abc->tab butterfly-abc) => butterfly-tab))
+
 ;; ## Tests for a CLI
 
 ;; Tests for generation of CLI answer.
 (against-background
  [(around :contents (let [test-input-1 [:a :b :C :g]
                           test-input-2 ["o" "5" 8 "r23s"]
-                          test-input-3 [98 :a "C#" "f" :L]] ?form))]
+                          test-input-3 [98 :a "C#" "f" :L]]
+                      ?form))]
  (fact "query with supported notes and nil default-tab"
   (ui/get-cli-answer test-input-1
                      (api/transform-notes test-input-1) nil)
@@ -90,4 +144,4 @@
           ":a - [:x :x :o :o :o :o :+]\n"
           "C# - [:o :o :o :o :o :o :-]\n"
           "f  - []\n"
-          ":L - []")))
+          ":L - []"))) 
