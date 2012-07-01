@@ -1,4 +1,4 @@
-(defproject tin-whistle-tabs "0.1.1-SNAPSHOT"
+(defproject tin-whistle-tabs "0.2.1-SNAPSHOT"
   :description "GUI tool that shows a D tin whistle fingering charts."
   :url "https://github.com/gsnewmark/tin-whistle-tabs"
   :license {:name "Eclipse Public License"
