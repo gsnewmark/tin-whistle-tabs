@@ -1,5 +1,4 @@
-(ns tin-whistle-tabs.core
-  (:gen-class))
+(ns tin-whistle-tabs.core)
 
 (defn -main
   "I don't do a whole lot ... yet."

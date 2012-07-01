@@ -1,7 +1,6 @@
 # tin-whistle-tabs
 
-A GUI tool that generates a tin whistle fingering charts for the given
-musical notes.
+A GUI tool that generates a D tin whistle tabs for the given musical notes.
 
 ## Usage
 
