@@ -1,9 +1,9 @@
 ;; ## Main tests namespace
 ;; Tests for a tool (mainly, its API).
 (ns tin-whistle-tabs.core-test
-  (:use [midje.sweet]
-        [tin-whistle-tabs.core])
-  (:require [tin-whistle-tabs.transformation-api :as api]))
+  (:use [midje.sweet])
+  (:require [tin-whistle-tabs.transformation-api :as api]
+            [tin-whistle-tabs.interface :as ui]))
 
 
 ;; ## Testing a note transformation API
@@ -61,3 +61,33 @@
          []             []
          ["c" "k"]      [[:o :x :x :o :o :o :+] []]
          ["g" "H" "G"]  [[:x :x :x :o :o :o :+] [] [:x :x :x :o :o :o :-]])
+
+;; ## Tests for a CLI
+
+;; Tests for generation of CLI answer.
+(against-background
+ [(around :contents (let [test-input-1 [:a :b :C :g]
+                          test-input-2 ["o" "5" 8 "r23s"]
+                          test-input-3 [98 :a "C#" "f" :L]] ?form))]
+ (fact "query with supported notes and nil default-tab"
+  (ui/get-cli-answer test-input-1
+                     (api/transform-notes test-input-1) nil)
+  => (str ":a - [:x :x :o :o :o :o :+]\n"
+          ":b - [:x :o :o :o :o :o :+]\n"
+          ":C - [:o :x :x :o :o :o :-]\n"
+          ":g - [:x :x :x :o :o :o :+]"))
+ (fact "query with unsupported notes and error message from api as default-tab"
+  (ui/get-cli-answer test-input-2
+                     (api/transform-notes test-input-2) api/no-such-note-error)
+  => (str "o  - Not a note.\n"
+          "5  - Not a note.\n"
+          "8  - Not a note.\n"
+          "r23s - Not a note."))
+ (fact "query with supported and unsupported notes and nil default-tab"
+  (ui/get-cli-answer test-input-3
+                     (api/transform-notes test-input-3) nil)
+  => (str "98 - []\n"
+          ":a - [:x :x :o :o :o :o :+]\n"
+          "C# - [:o :o :o :o :o :o :-]\n"
+          "f  - []\n"
+          ":L - []")))

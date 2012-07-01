@@ -27,7 +27,7 @@
     (throw (IllegalArgumentException. no-such-note-error))))
 
 (defn transform-notes
-  "Transforms every note in a given sequence to a transitional format. Unsupported notes are transformed to empty lists."
+  "Transforms every note in a given sequence to a transitional format. Unsupported notes are transformed to empty vectors."
   [notes]
   (map #(try
           (transform-note %)
