@@ -39,7 +39,7 @@
 ;; TODO take key of tune into account (insert sharps where required)
 ;; TODO correctly process sharps (more than a character)
 ;; TODO take bars into account
-;; TODO take duration into account
+;; TODO take note duration into account
 (defn abc->tab
   "Creates a list with tabs for a given string with an ABC notation of a tune."
   [abc]
