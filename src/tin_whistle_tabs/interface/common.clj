@@ -1,4 +1,4 @@
-;; ## Common interface elements namespace.
+;; ## Common interface elements namespace
 (ns tin-whistle-tabs.interface.common)
 
 
@@ -15,3 +15,9 @@
 
 ;; Title of help section.
 (def help-title "Help")
+
+;; ## Helpers
+
+(defn replace-unsupported-notes
+  "Replaces the unsupported notes ([]) by a supplied rpl. Doesn't replace if rpl is nil."
+  [rpl seq] (if-not (nil? rpl) (map #(if (empty? %) rpl %) seq) seq))

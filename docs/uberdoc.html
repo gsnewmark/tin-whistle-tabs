@@ -3028,42 +3028,16 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>tin-whistle-tabs -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">tin-whistle-tabs</h1><h2 class="project-version">0.4.0-SNAPSHOT</h2><br /><p>GUI tool that shows a D tin whistle fingering charts.</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">com.stuartsierra/lazytest</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">midje</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#tin-whistle-tabs.core">tin-whistle-tabs.core</a></li><li><a href="#tin-whistle-tabs.interface">tin-whistle-tabs.interface</a></li><li><a href="#tin-whistle-tabs.transformation-api">tin-whistle-tabs.transformation-api</a></li><li><a href="#tin-whistle-tabs.core-test">tin-whistle-tabs.core-test</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.core" name="tin-whistle-tabs.core"><h1 class="project-name">tin-whistle-tabs.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Main tool's namespace</h2>
+</script><title>tin-whistle-tabs -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">tin-whistle-tabs</h1><h2 class="project-version">0.4.3-SNAPSHOT</h2><br /><p>GUI tool that shows a D tin whistle fingering charts.</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">com.stuartsierra/lazytest</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">midje</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#tin-whistle-tabs.core">tin-whistle-tabs.core</a></li><li><a href="#tin-whistle-tabs.transformation-api">tin-whistle-tabs.transformation-api</a></li><li><a href="#tin-whistle-tabs.interface.common">tin-whistle-tabs.interface.common</a></li><li><a href="#tin-whistle-tabs.interface.cli">tin-whistle-tabs.interface.cli</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.core" name="tin-whistle-tabs.core"><h1 class="project-name">tin-whistle-tabs.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Main tool's namespace</h2>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.core
-  (:require [tin-whistle-tabs.transformation-api :as api]
-            [tin-whistle-tabs.interface :as ui])
+  (:use [tin-whistle-tabs.interface.cli :only (cli)])
   (:gen-class))</pre></td></tr><tr><td class="docs"><h2>Program's entry point</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Starts a user interface of a tool. If CLI arguments are supplied CLI version is started.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn -main
   [&amp; args]
   (when-not (empty? args)
-    (ui/cli args (api/transform-notes args) api/no-such-note-error)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface" name="tin-whistle-tabs.interface"><h1 class="project-name">tin-whistle-tabs.interface</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Interfaces namespace.</h2>
-
-<p>Functions that provide means of interaction with the user.</p>
-</td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface)</pre></td></tr><tr><td class="docs"><h2>UI constants</h2>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Title of an app.</p>
-</td><td class="codes"><pre class="brush: clojure">(def title &quot;Tin Whistle (D) fingering chart\n&quot;)</pre></td></tr><tr><td class="docs"><p>Text for blank input.</p>
-</td><td class="codes"><pre class="brush: clojure">(def blank-input-message &quot;Blank input.&quot;)</pre></td></tr><tr><td class="docs"><h2>CLI</h2>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(declare get-cli-answer)</pre></td></tr><tr><td class="docs"><p>Prints notes and their tabs to command-line interface. Arguments are a list of non-transformed notes, a list of transformed notes and a default tab (to use with an unsupported note). Default value if default-tab is nil.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn cli
-  ([notes transformed-notes]
-     (cli notes transformed-notes nil))
-  ([notes transformed-notes default-tab]
-     (if-not (or (nil? notes) (nil? transformed-notes))
-      (println
-       (str title (get-cli-answer notes transformed-notes default-tab)))
-      (println blank-input-message))))</pre></td></tr><tr><td class="docs"><p>Transforms a given list of notes to a string with the corresponding fingerings. Arguments are a list of non-transformed notes, a list of transformed notes and a default tab (to use with an unsupported note). If default tab is nil, uses a fingering from transformed-notes (empty vector).</p>
-</td><td class="codes"><pre class="brush: clojure">(defn get-cli-answer
-  [notes transformed-notes default-tab]
-  (-&gt;&gt; transformed-notes
-       (map #(if (empty? %) (if default-tab default-tab %) %))
-       (interleave notes)
-       (partition 2)
-       (map #(format &quot;%-2s - %s&quot; (first %) (last %)))
-       (interpose &quot;\n&quot;)
-       (apply str)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.transformation-api" name="tin-whistle-tabs.transformation-api"><h1 class="project-name">tin-whistle-tabs.transformation-api</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Tool's API namespace</h2>
+    (cli args)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.transformation-api" name="tin-whistle-tabs.transformation-api"><h1 class="project-name">tin-whistle-tabs.transformation-api</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Tool's API namespace</h2>
 
 <p>Functions that transforms a note to a transitional format.</p>
 
@@ -3071,9 +3045,10 @@ net.brehaut.ClojureTools = (function (SH) {
 
 <p>Supported notes: D E F# G A B C C# d e f# g a b c c#</p>
 
-<p>Format itself is defined as a list with 7 elements: first six elements
+<p>Format itself is defined as a vector with 7 elements: first six elements
 represent a whistle's holes (:o if opened, :x if closed), last -
-whether the user must overblow (if not - :-, else - :+).</p>
+whether the user must overblow (if not - :-, else - :+).
+Unsupported notes are represented as empty vectors.</p>
 
 <p>For example, F# would be represented as a [:x :x :x :x :o :o :-].</p>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.transformation-api
@@ -3097,7 +3072,7 @@ whether the user must overblow (if not - :-, else - :+).</p>
 <p>TODO take key of tune into account (insert sharps where required)
 TODO correctly process sharps (more than a character)
 TODO take bars into account
-TODO take duration into account</p>
+TODO take note duration into account</p>
 </td><td class="codes"><pre class="brush: clojure">(defn abc-&gt;tab
   [abc]
   (when-not (nil? abc)
@@ -3133,147 +3108,68 @@ TODO take duration into account</p>
   [abc]
   (when-not (nil? abc)
     ; in ABC notation notes start after the line with K: ...
-    (last (string/split abc #&quot;K:.*\n&quot;))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.core-test" name="tin-whistle-tabs.core-test"><h1 class="project-name">tin-whistle-tabs.core-test</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Main tests namespace</h2>
-
-<p>Tests for a tool (mainly, its API).</p>
-</td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.core-test
-  (:use [midje.sweet])
-  (:require [tin-whistle-tabs.transformation-api :as api]
-            [tin-whistle-tabs.interface :as ui]))</pre></td></tr><tr><td class="docs"><h2>Testing a note transformation API</h2>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Tests for a transform-note.</p>
-</td><td class="codes"><pre class="brush: clojure">(tabular &quot;Transformation of a note to a transitional format.&quot;
-         (fact (api/transform-note ?note) =&gt; ?transformed)
-         ?note ?transformed
-         :D    [:x :x :x :x :x :x :-]
-         :E    [:x :x :x :x :x :o :-]
-         :F#   [:x :x :x :x :o :o :-]
-         :G    [:x :x :x :o :o :o :-]
-         :A    [:x :x :o :o :o :o :-]
-         :B    [:x :o :o :o :o :o :-]
-         :C    [:o :x :x :o :o :o :-]
-         :C#   [:o :o :o :o :o :o :-]
-         :d    [:o :x :x :x :x :x :+]
-         :e    [:x :x :x :x :x :o :+]
-         :f#   [:x :x :x :x :o :o :+]
-         :g    [:x :x :x :o :o :o :+]
-         :a    [:x :x :o :o :o :o :+]
-         :b    [:x :o :o :o :o :o :+]
-         :c    [:o :x :x :o :o :o :+]
-         :c#   [:o :o :o :o :o :o :+]
-         &quot;D&quot;   [:x :x :x :x :x :x :-]
-         &quot;E&quot;   [:x :x :x :x :x :o :-]
-         &quot;F#&quot;  [:x :x :x :x :o :o :-]
-         &quot;G&quot;   [:x :x :x :o :o :o :-]
-         &quot;A&quot;   [:x :x :o :o :o :o :-]
-         &quot;B&quot;   [:x :o :o :o :o :o :-]
-         &quot;C&quot;   [:o :x :x :o :o :o :-]
-         &quot;C#&quot;  [:o :o :o :o :o :o :-]
-         &quot;d&quot;   [:o :x :x :x :x :x :+]
-         &quot;e&quot;   [:x :x :x :x :x :o :+]
-         &quot;f#&quot;  [:x :x :x :x :o :o :+]
-         &quot;g&quot;   [:x :x :x :o :o :o :+]
-         &quot;a&quot;   [:x :x :o :o :o :o :+]
-         &quot;b&quot;   [:x :o :o :o :o :o :+]
-         &quot;c&quot;   [:o :x :x :o :o :o :+]
-         &quot;c#&quot;  [:o :o :o :o :o :o :+]
-         &quot;5&quot;   (throws IllegalArgumentException)
-         &quot;f 3&quot; (throws IllegalArgumentException)
-         &quot;f&quot;   (throws IllegalArgumentException)
-         :y    (throws IllegalArgumentException))</pre></td></tr><tr><td class="docs"><p>Tests for a transform-notes.</p>
-</td><td class="codes"><pre class="brush: clojure">(tabular &quot;Transformation of the notes to a transitional format.&quot;
-         (fact (api/transform-notes ?notes) =&gt; ?transformed)
-         ?notes         ?transformed
-         [&quot;a&quot; &quot;B&quot; &quot;C#&quot;] [[:x :x :o :o :o :o :+] [:x :o :o :o :o :o :-]
-                         [:o :o :o :o :o :o :-]]
-         [:D :b :F#]    [[:x :x :x :x :x :x :-] [:x :o :o :o :o :o :+]
-                         [:x :x :x :x :o :o :-]]
-         [:E]           [[:x :x :x :x :x :o :-]]
-         []             []
-         [&quot;c&quot; &quot;k&quot;]      [[:o :x :x :o :o :o :+] []]
-         [&quot;g&quot; &quot;H&quot; &quot;G&quot;]  [[:x :x :x :o :o :o :+] [] [:x :x :x :o :o :o :-]])</pre></td></tr><tr><td class="docs"><p>Tests for a abc->tab transformation
-ABC is from http://www.thesession.org/tunes/display/10#abc</p>
-</td><td class="codes"><pre class="brush: clojure">(against-background
- [(around :contents
-          (let [butterfly-abc
-                (str &quot;X: 1&quot;
-                     &quot;T: Butterfly, The\n&quot;
-                     &quot;M: 9/8\n&quot;
-                     &quot;L: 1/8\n&quot;
-                     &quot;R: slip jig\n&quot;
-                     &quot;K: Emin\n&quot;
-                     &quot;|:B2E G2E F3|B2E G2E FED|B2E G2E F3|B2d d2B AFD:|\n&quot;
-                     &quot;|:B2d e2f g3|B2d g2e dBA|B2d e2f g2a|b2a g2e dBA:|\n&quot;
-                     &quot;|:B3 B2A G2A|B3 BAB dBA|B3 B2A G2A|B2d g2e dBA:|&quot;)
-                butterfly-abc-notes
-                (str &quot;|:B2E G2E F3|B2E G2E FED|B2E G2E F3|B2d d2B AFD:|\n&quot;
-                     &quot;|:B2d e2f g3|B2d g2e dBA|B2d e2f g2a|b2a g2e dBA:|\n&quot;
-                     &quot;|:B3 B2A G2A|B3 BAB dBA|B3 B2A G2A|B2d g2e dBA:|&quot;)
-                butterfly-tab
-                [[:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
-                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
-                 [:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
-                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
-                 [:x :x :x :x :x :o :-] [:x :x :x :x :x :x :-]
-                 [:x :o :o :o :o :o :-] [:x :x :x :x :x :o :-]
-                 [:x :x :x :o :o :o :-] [:x :x :x :x :x :o :-] []
-                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
-                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-] [] [:x :x :x :x :x :x :-]
-                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
-                 [:x :x :x :x :x :o :+] [] [:x :x :x :o :o :o :+]
-                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
-                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
-                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
-                 [:o :x :x :x :x :x :+] [:x :x :x :x :x :o :+] []
-                 [:x :x :x :o :o :o :+] [:x :x :o :o :o :o :+]
-                 [:x :o :o :o :o :o :+] [:x :x :o :o :o :o :+]
-                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
-                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
-                 [:x :o :o :o :o :o :-] [:x :x :o :o :o :o :-]
-                 [:x :x :x :o :o :o :-] [:x :x :o :o :o :o :-]
-                 [:x :o :o :o :o :o :-] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
-                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-] [:x :o :o :o :o :o :-]
-                 [:x :o :o :o :o :o :-] [:x :x :o :o :o :o :-]
-                 [:x :x :x :o :o :o :-] [:x :x :o :o :o :o :-]
-                 [:x :o :o :o :o :o :-] [:o :x :x :x :x :x :+]
-                 [:x :x :x :o :o :o :+] [:x :x :x :x :x :o :+]
-                 [:o :x :x :x :x :x :+] [:x :o :o :o :o :o :-]
-                 [:x :x :o :o :o :o :-]]]
-            ?form))]
- (fact &quot;extract notes part from an abc notation&quot;
-       (api/extract-notes butterfly-abc) =&gt; butterfly-abc-notes)
- (fact &quot;transform butterfly tune abc notation to a transitional format (vector)&quot;
-       (api/abc-&gt;tab butterfly-abc) =&gt; butterfly-tab))</pre></td></tr><tr><td class="docs"><h2>Tests for a CLI</h2>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Tests for generation of CLI answer.</p>
-</td><td class="codes"><pre class="brush: clojure">(against-background
- [(around :contents (let [test-input-1 [:a :b :C :g]
-                          test-input-2 [&quot;o&quot; &quot;5&quot; 8 &quot;r23s&quot;]
-                          test-input-3 [98 :a &quot;C#&quot; &quot;f&quot; :L]]
-                      ?form))]
- (fact &quot;query with supported notes and nil default-tab&quot;
-  (ui/get-cli-answer test-input-1
-                     (api/transform-notes test-input-1) nil)
-  =&gt; (str &quot;:a - [:x :x :o :o :o :o :+]\n&quot;
-          &quot;:b - [:x :o :o :o :o :o :+]\n&quot;
-          &quot;:C - [:o :x :x :o :o :o :-]\n&quot;
-          &quot;:g - [:x :x :x :o :o :o :+]&quot;))
- (fact &quot;query with unsupported notes and error message from api as default-tab&quot;
-  (ui/get-cli-answer test-input-2
-                     (api/transform-notes test-input-2) api/no-such-note-error)
-  =&gt; (str &quot;o  - Not a note.\n&quot;
-          &quot;5  - Not a note.\n&quot;
-          &quot;8  - Not a note.\n&quot;
-          &quot;r23s - Not a note.&quot;))
- (fact &quot;query with supported and unsupported notes and nil default-tab&quot;
-  (ui/get-cli-answer test-input-3
-                     (api/transform-notes test-input-3) nil)
-  =&gt; (str &quot;98 - []\n&quot;
-          &quot;:a - [:x :x :o :o :o :o :+]\n&quot;
-          &quot;C# - [:o :o :o :o :o :o :-]\n&quot;
-          &quot;f  - []\n&quot;
-          &quot;:L - []&quot;))) </pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+    (last (string/split abc #&quot;K:.*\n&quot;))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.common" name="tin-whistle-tabs.interface.common"><h1 class="project-name">tin-whistle-tabs.interface.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Common interface elements namespace</h2>
+</td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.common)</pre></td></tr><tr><td class="docs"><h2>UI constants</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Title of an app.</p>
+</td><td class="codes"><pre class="brush: clojure">(def title &quot;Tin Whistle (D) fingering chart\n&quot;)</pre></td></tr><tr><td class="docs"><p>Text for blank input.</p>
+</td><td class="codes"><pre class="brush: clojure">(def blank-input-message &quot;Blank input.&quot;)</pre></td></tr><tr><td class="docs"><p>Text for unsupported input.</p>
+</td><td class="codes"><pre class="brush: clojure">(def unsupported-input-message &quot;Unsupported arguments.&quot;)</pre></td></tr><tr><td class="docs"><p>Title of help section.</p>
+</td><td class="codes"><pre class="brush: clojure">(def help-title &quot;Help&quot;)</pre></td></tr><tr><td class="docs"><h2>Helpers</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Replaces the unsupported notes ([]) by a supplied rpl. Doesn't replace if rpl is nil.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn replace-unsupported-notes
+  [rpl seq] (if-not (nil? rpl) (map #(if (empty? %) rpl %) seq) seq))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.cli" name="tin-whistle-tabs.interface.cli"><h1 class="project-name">tin-whistle-tabs.interface.cli</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>CLI namespace</h2>
+</td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.cli
+  (:use [tin-whistle-tabs.interface.common])
+  (:require [tin-whistle-tabs.transformation-api :as api]))</pre></td></tr><tr><td class="docs"><h2>Declarations</h2>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(declare abc-&gt;tab)
+(declare transform-notes)
+(declare generate-help)</pre></td></tr><tr><td class="docs"><h2>Possible CLI modes</h2>
+</td><td class="codes"><pre class="brush: clojure">(def modes {:abc {:command &quot;-abc&quot; :help (str &quot;creates a tab for &quot;
+                                             &quot;a tune from an ABC file, &quot;
+                                             &quot;takes one argument - name &quot;
+                                             &quot;of a file with ABC notation&quot;)}
+            :note {:command &quot;-note&quot; :help (str &quot;creates a charts for a given &quot;
+                                               &quot;notes, arguments - any &quot;
+                                               &quot;number of notes&quot;)}})</pre></td></tr><tr><td class="docs"><h2>CLI itself</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>CLI interaction with a user. First argument defines mode, all other - arguments to a mode. </p>
+</td><td class="codes"><pre class="brush: clojure">(defn cli
+  ([args]
+     (cli args api/no-such-note-error))
+  ([args default-tab]
+     (if-not (nil? args)
+       (let [mode (first args) args (rest args)]
+         (println
+          (str title
+               (cond
+                (= mode ((modes :abc) :command))
+                (abc-&gt;tab args default-tab)
+                (= mode ((modes :note) :command))
+                (transform-notes args default-tab)
+                :else (generate-help)))))
+       (println blank-input-message))))</pre></td></tr><tr><td class="docs"><h2>Helpers</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Generates a tab for a tune stored in a ABC-notation file specified as a first argument. Unsupported notes are replaced by a default-tab.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn abc-&gt;tab
+  [[file] default-tab]
+  (let [abc-string (slurp file)]
+    (-&gt;&gt; (api/abc-&gt;tab abc-string)
+         (replace-unsupported-notes default-tab)
+         (map #(format &quot;%s\n&quot; %))
+         (apply str))))</pre></td></tr><tr><td class="docs"><p>Transforms a given list of notes to a string with the corresponding fingerings. Arguments are a list of notes and a default tab (to use with an unsupported note). If default tab is nil, uses a fingering from transformed-notes (empty vector).</p>
+</td><td class="codes"><pre class="brush: clojure">(defn transform-notes
+  [args default-tab]
+  (-&gt;&gt; (api/transform-notes args)
+       (replace-unsupported-notes default-tab)
+       (interleave args)
+       (partition 2)
+       (map #(format &quot;%-2s - %s&quot; (first %) (last %)))
+       (interpose &quot;\n&quot;)
+       (apply str)))</pre></td></tr><tr><td class="docs"><p>Generates help message for a CLI usage.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn generate-help
+  []
+  (-&gt;&gt; (map #(let [info (second %)]
+           (format &quot;%-6s - %s&quot; (info :command) (info :help)))
+            modes)
+       (interpose &quot;\n&quot;)
+       (apply str help-title &quot;\n&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>

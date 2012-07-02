@@ -5,9 +5,11 @@
 ;;
 ;; Supported notes: D E F# G A B C C# d e f# g a b c c#
 ;;
-;; Format itself is defined as a list with 7 elements: first six elements
+;; Format itself is defined as a vector with 7 elements: first six elements
 ;; represent a whistle's holes (:o if opened, :x if closed), last -
 ;; whether the user must overblow (if not - :-, else - :+).
+;;
+;; Unsupported notes are represented as empty vectors.
 ;;
 ;; For example, F# would be represented as a [:x :x :x :x :o :o :-].
 (ns tin-whistle-tabs.transformation-api

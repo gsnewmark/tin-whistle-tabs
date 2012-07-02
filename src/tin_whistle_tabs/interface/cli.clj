@@ -1,4 +1,4 @@
-;; ## CLI namespace.
+;; ## CLI namespace
 (ns tin-whistle-tabs.interface.cli
   (:use [tin-whistle-tabs.interface.common])
   (:require [tin-whistle-tabs.transformation-api :as api]))
@@ -9,7 +9,6 @@
 (declare abc->tab)
 (declare transform-notes)
 (declare generate-help)
-(declare replace-unsupported-notes)
 
 ;; ## Possible CLI modes
 (def modes {:abc {:command "-abc" :help (str "creates a tab for "
@@ -42,8 +41,8 @@
 ;; ## Helpers
 
 (defn abc->tab
-  [[file] default-tab]
   "Generates a tab for a tune stored in a ABC-notation file specified as a first argument. Unsupported notes are replaced by a default-tab."
+  [[file] default-tab]
   (let [abc-string (slurp file)]
     (->> (api/abc->tab abc-string)
          (replace-unsupported-notes default-tab)
@@ -69,7 +68,3 @@
             modes)
        (interpose "\n")
        (apply str help-title "\n")))
-
-(defn replace-unsupported-notes
-  "Replaces the unsupported notes ([]) by a supplied rpl. Doesn't replace if rpl is nil."
-  [rpl seq] (if-not (nil? rpl) (map #(if (empty? %) rpl %) seq) seq))
