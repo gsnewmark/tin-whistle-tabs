@@ -1,6 +1,6 @@
 ;; ## Main tool's namespace
 (ns tin-whistle-tabs.core
-  (:require [tin-whistle-tabs.interface :as ui])
+  (:use [tin-whistle-tabs.interface.cli :only (cli)])
   (:gen-class))
 
 
@@ -10,4 +10,4 @@
   "Starts a user interface of a tool. If CLI arguments are supplied CLI version is started."
   [& args]
   (when-not (empty? args)
-    (ui/cli args)))
+    (cli args)))
