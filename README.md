@@ -10,6 +10,8 @@ JAR file could be obtained by executing:
 
 from a directory with a source code.
 
+Alternatively, it could be downloaded from [here](https://github.com/downloads/gsnewmark/tin-whistle-tabs/tin-whistle-tabs-0.5.0-SNAPSHOT.jar).
+
 ## Usage
 
 ### GUI version
@@ -29,11 +31,11 @@ Start a program using the following command:
 
 Possible arguments are:
 
-    -abc <filename> - creates a tab for a tune saved in a specified
-    file in a ABC notation
+`-abc <filename>` - creates a tab for a tune saved in a specified file in ABC
+ notation 
 
-    -note <sequence_of_notes> - gives a fingering chart for every note
-     specified as an argument (notes must be separated by a space)
+`-note <sequence_of_notes>` - gives a fingering chart for every note specified
+as an argument (notes must be separated by a space) 
 
 Supported notes are: ** D E F# G A B C C# d e f# g a b c c# **
 
