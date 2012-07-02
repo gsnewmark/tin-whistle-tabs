@@ -5,7 +5,7 @@
 ;; ## UI constants
 
 ;; Title of an app.
-(def title "Tin Whistle (D) fingering chart\n")
+(def title "Tin Whistle (D)\n")
 
 ;; Text for blank input.
 (def blank-input-message "Blank input.")

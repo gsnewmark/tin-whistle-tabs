@@ -11,3 +11,4 @@ pom.xml
 gen_docs.sh
 ~
 \#*#
+*.abc

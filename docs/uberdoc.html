@@ -3028,16 +3028,18 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>tin-whistle-tabs -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">tin-whistle-tabs</h1><h2 class="project-version">0.4.3-SNAPSHOT</h2><br /><p>GUI tool that shows a D tin whistle fingering charts.</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">com.stuartsierra/lazytest</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">midje</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#tin-whistle-tabs.core">tin-whistle-tabs.core</a></li><li><a href="#tin-whistle-tabs.transformation-api">tin-whistle-tabs.transformation-api</a></li><li><a href="#tin-whistle-tabs.interface.common">tin-whistle-tabs.interface.common</a></li><li><a href="#tin-whistle-tabs.interface.cli">tin-whistle-tabs.interface.cli</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.core" name="tin-whistle-tabs.core"><h1 class="project-name">tin-whistle-tabs.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Main tool's namespace</h2>
+</script><title>tin-whistle-tabs -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">tin-whistle-tabs</h1><h2 class="project-version">0.5.0-SNAPSHOT</h2><br /><p>GUI tool that shows a D tin whistle fingering charts.</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">seesaw</td><td class="dotted"><hr /></td><td class="dep-version">1.4.1</td></tr><tr><td class="dep-name">com.stuartsierra/lazytest</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">midje</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#tin-whistle-tabs.core">tin-whistle-tabs.core</a></li><li><a href="#tin-whistle-tabs.transformation-api">tin-whistle-tabs.transformation-api</a></li><li><a href="#tin-whistle-tabs.interface.common">tin-whistle-tabs.interface.common</a></li><li><a href="#tin-whistle-tabs.interface.cli">tin-whistle-tabs.interface.cli</a></li><li><a href="#tin-whistle-tabs.interface.gui">tin-whistle-tabs.interface.gui</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.core" name="tin-whistle-tabs.core"><h1 class="project-name">tin-whistle-tabs.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Main tool's namespace</h2>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.core
-  (:use [tin-whistle-tabs.interface.cli :only (cli)])
+  (:use [tin-whistle-tabs.interface.cli :only (cli)]
+        [tin-whistle-tabs.interface.gui :only (gui)])
   (:gen-class))</pre></td></tr><tr><td class="docs"><h2>Program's entry point</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Starts a user interface of a tool. If CLI arguments are supplied CLI version is started.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn -main
   [&amp; args]
-  (when-not (empty? args)
-    (cli args)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.transformation-api" name="tin-whistle-tabs.transformation-api"><h1 class="project-name">tin-whistle-tabs.transformation-api</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Tool's API namespace</h2>
+  (if-not (empty? args)
+    (cli args)
+    (gui)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.transformation-api" name="tin-whistle-tabs.transformation-api"><h1 class="project-name">tin-whistle-tabs.transformation-api</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Tool's API namespace</h2>
 
 <p>Functions that transforms a note to a transitional format.</p>
 
@@ -3047,8 +3049,9 @@ net.brehaut.ClojureTools = (function (SH) {
 
 <p>Format itself is defined as a vector with 7 elements: first six elements
 represent a whistle's holes (:o if opened, :x if closed), last -
-whether the user must overblow (if not - :-, else - :+).
-Unsupported notes are represented as empty vectors.</p>
+whether the user must overblow (if not - :-, else - :+).</p>
+
+<p>Unsupported notes are represented as empty vectors.</p>
 
 <p>For example, F# would be represented as a [:x :x :x :x :o :o :-].</p>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.transformation-api
@@ -3111,7 +3114,7 @@ TODO take note duration into account</p>
     (last (string/split abc #&quot;K:.*\n&quot;))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.common" name="tin-whistle-tabs.interface.common"><h1 class="project-name">tin-whistle-tabs.interface.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Common interface elements namespace</h2>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.common)</pre></td></tr><tr><td class="docs"><h2>UI constants</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Title of an app.</p>
-</td><td class="codes"><pre class="brush: clojure">(def title &quot;Tin Whistle (D) fingering chart\n&quot;)</pre></td></tr><tr><td class="docs"><p>Text for blank input.</p>
+</td><td class="codes"><pre class="brush: clojure">(def title &quot;Tin Whistle (D)\n&quot;)</pre></td></tr><tr><td class="docs"><p>Text for blank input.</p>
 </td><td class="codes"><pre class="brush: clojure">(def blank-input-message &quot;Blank input.&quot;)</pre></td></tr><tr><td class="docs"><p>Text for unsupported input.</p>
 </td><td class="codes"><pre class="brush: clojure">(def unsupported-input-message &quot;Unsupported arguments.&quot;)</pre></td></tr><tr><td class="docs"><p>Title of help section.</p>
 </td><td class="codes"><pre class="brush: clojure">(def help-title &quot;Help&quot;)</pre></td></tr><tr><td class="docs"><h2>Helpers</h2>
@@ -3171,5 +3174,55 @@ TODO take note duration into account</p>
            (format &quot;%-6s - %s&quot; (info :command) (info :help)))
             modes)
        (interpose &quot;\n&quot;)
-       (apply str help-title &quot;\n&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+       (apply str help-title &quot;\n&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.gui" name="tin-whistle-tabs.interface.gui"><h1 class="project-name">tin-whistle-tabs.interface.gui</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>GUI namespace.</h2>
+</td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.gui
+  (:use [tin-whistle-tabs.interface.common]
+        [seesaw.core])
+  (:require [tin-whistle-tabs.transformation-api :as api]))</pre></td></tr><tr><td class="docs"><h2>Declarations</h2>
+</td><td class="codes"><pre class="brush: clojure">(declare show-main-frame)
+(declare activate-listeners)
+(declare display)</pre></td></tr><tr><td class="docs"><h2>GUI elements</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>App's main window.</p>
+</td><td class="codes"><pre class="brush: clojure">(def main-frame (frame :title title
+                       :width 200
+                       :height 200
+                       :resizable? false))</pre></td></tr><tr><td class="docs"><p>Submit button.</p>
+</td><td class="codes"><pre class="brush: clojure">(def submit (button :text &quot;Ok&quot;))</pre></td></tr><tr><td class="docs"><p>Notes listbox.
+TODO show notes in a correct 'whistle' order</p>
+</td><td class="codes"><pre class="brush: clojure">(def notes-listbox
+  (listbox :model (-&gt;&gt; api/notes-&gt;vectors keys sort (map name))
+                      :selection-mode :single))</pre></td></tr><tr><td class="docs"><p>Text area for a tab.</p>
+</td><td class="codes"><pre class="brush: clojure">(def tab-area (label &quot;nth selected&quot;))</pre></td></tr><tr><td class="docs"><p>Initial content for a main frame.</p>
+</td><td class="codes"><pre class="brush: clojure">(def main-frame-content
+  (left-right-split (scrollable notes-listbox) tab-area :divider-location 1/4))</pre></td></tr><tr><td class="docs"><h2>GUI itself</h2>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn gui []
+  (invoke-later
+   (show-main-frame)))</pre></td></tr><tr><td class="docs"><h2>Helpers</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Shows a GUI with possibility to debug it.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn show-main-frame
+  []
+  (display main-frame-content)
+  (activate-listeners)
+  (selection! notes-listbox &quot;D&quot;)
+  (show! main-frame))</pre></td></tr><tr><td class="docs"><p>Listens for a click on a submit button</p>
+</td><td class="codes"><pre class="brush: clojure">(defn activate-submit-listener
+  []
+  (listen submit :action (fn [e] (alert e &quot;Ok!&quot;))))</pre></td></tr><tr><td class="docs"><p>Listens to a change of a selection in a notes list.</p>
+
+<p>TODO display some graphics, not a vector</p>
+</td><td class="codes"><pre class="brush: clojure">(defn activate-notes-list-listener
+  []
+  (listen notes-listbox :selection
+          (fn [e]
+            (when-let [s (selection e)]
+              (text! tab-area (str (api/transform-note s)))))))</pre></td></tr><tr><td class="docs"><p>Activates all listeners required on a app's start.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn activate-listeners
+  []
+  (activate-notes-list-listener)
+  (activate-submit-listener))</pre></td></tr><tr><td class="docs"><p>Displays given content on a main frame.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn display
+  [content]
+  (config! main-frame :content content)
+  content)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>

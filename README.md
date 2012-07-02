@@ -2,13 +2,30 @@
 
 A GUI/CLI tool that generates a D tin whistle tabs for the given musical notes.
 
+## Installation
+
+JAR file could be obtained by executing:
+
+    $ lein uberjar
+
+from a directory with a source code.
+
 ## Usage
+
+### GUI version
+
+Start a program using the following command:
+
+    $ java -jar tin-whistle-tabs-0.5.0-SNAPSHOT-standalone.jar
+
+Shortly you will see an app's window - it's separated into two parts: on left
+you see a list of selectable notes, on right - tab for a selected note.
 
 ### CLI version
 
 Start a program using the following command:
 
-    $ java -jar tin-whistle-tabs-0.4.3-standalone.jar [args]
+    $ java -jar tin-whistle-tabs-0.5.0-SNAPSHOT-standalone.jar [args]
 
 Possible arguments are:
 
