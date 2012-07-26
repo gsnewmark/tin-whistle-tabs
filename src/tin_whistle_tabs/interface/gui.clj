@@ -6,9 +6,7 @@
 
 
 ;; ## Declarations
-(declare show-main-frame)
-(declare activate-listeners)
-(declare display)
+(declare show-main-frame activate-listeners display)
 
 ;; ## GUI elements
 
@@ -31,8 +29,16 @@
 (def tab-area (label "nth selected"))
 
 ;; Initial content for a main frame.
-(def main-frame-content
+(def note-to-tab-window
   (left-right-split (scrollable notes-listbox) tab-area :divider-location 1/4))
+
+(def container (tabbed-panel
+                :tabs [{:title "Note-to-Tab"
+                        :tip "Translate a note to a whistle tab."
+                        :content note-to-tab-window}
+                       {:title "File-to-Tab"
+                        :tip "Creates a tab for a given ABC-file."
+                        :content "not implemented yet"}]))
 
 ;; ## GUI itself
 
@@ -45,7 +51,8 @@
 (defn show-main-frame
   "Shows a GUI with possibility to debug it."
   []
-  (display main-frame-content)
+  (native!)
+  (display container)
   (activate-listeners)
   (selection! notes-listbox "D")
   (show! main-frame))

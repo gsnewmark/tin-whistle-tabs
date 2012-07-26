@@ -19,5 +19,6 @@
 ;; ## Helpers
 
 (defn replace-unsupported-notes
-  "Replaces the unsupported notes ([]) by a supplied rpl. Doesn't replace if rpl is nil."
+  "Replaces the unsupported notes ([]) by a supplied rpl.
+Doesn't replace if rpl is nil."
   [rpl seq] (if-not (nil? rpl) (map #(if (empty? %) rpl %) seq) seq))
