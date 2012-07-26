@@ -3118,7 +3118,8 @@ TODO take note duration into account</p>
 </td><td class="codes"><pre class="brush: clojure">(def blank-input-message &quot;Blank input.&quot;)</pre></td></tr><tr><td class="docs"><p>Text for unsupported input.</p>
 </td><td class="codes"><pre class="brush: clojure">(def unsupported-input-message &quot;Unsupported arguments.&quot;)</pre></td></tr><tr><td class="docs"><p>Title of help section.</p>
 </td><td class="codes"><pre class="brush: clojure">(def help-title &quot;Help&quot;)</pre></td></tr><tr><td class="docs"><h2>Helpers</h2>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Replaces the unsupported notes ([]) by a supplied rpl. Doesn't replace if rpl is nil.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Replaces the unsupported notes ([]) by a supplied rpl.
+Doesn't replace if rpl is nil.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn replace-unsupported-notes
   [rpl seq] (if-not (nil? rpl) (map #(if (empty? %) rpl %) seq) seq))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.cli" name="tin-whistle-tabs.interface.cli"><h1 class="project-name">tin-whistle-tabs.interface.cli</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>CLI namespace</h2>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.cli
@@ -3177,24 +3178,35 @@ TODO take note duration into account</p>
        (apply str help-title &quot;\n&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#tin-whistle-tabs.interface.gui" name="tin-whistle-tabs.interface.gui"><h1 class="project-name">tin-whistle-tabs.interface.gui</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>GUI namespace.</h2>
 </td><td class="codes"><pre class="brush: clojure">(ns tin-whistle-tabs.interface.gui
   (:use [tin-whistle-tabs.interface.common]
-        [seesaw.core])
+        [seesaw.core]
+        [seesaw.chooser]
+        [tin-whistle-tabs.interface.cli :only [abc-&gt;tab]])
   (:require [tin-whistle-tabs.transformation-api :as api]))</pre></td></tr><tr><td class="docs"><h2>Declarations</h2>
-</td><td class="codes"><pre class="brush: clojure">(declare show-main-frame)
-(declare activate-listeners)
-(declare display)</pre></td></tr><tr><td class="docs"><h2>GUI elements</h2>
+</td><td class="codes"><pre class="brush: clojure">(declare show-main-frame activate-listeners display)</pre></td></tr><tr><td class="docs"><h2>GUI elements</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>TODO add ids and use selectors</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>App's main window.</p>
 </td><td class="codes"><pre class="brush: clojure">(def main-frame (frame :title title
                        :width 200
                        :height 200
-                       :resizable? false))</pre></td></tr><tr><td class="docs"><p>Submit button.</p>
-</td><td class="codes"><pre class="brush: clojure">(def submit (button :text &quot;Ok&quot;))</pre></td></tr><tr><td class="docs"><p>Notes listbox.
+                       :resizable? false))</pre></td></tr><tr><td class="docs"><p>Notes listbox.
 TODO show notes in a correct 'whistle' order</p>
 </td><td class="codes"><pre class="brush: clojure">(def notes-listbox
   (listbox :model (-&gt;&gt; api/notes-&gt;vectors keys sort (map name))
                       :selection-mode :single))</pre></td></tr><tr><td class="docs"><p>Text area for a tab.</p>
-</td><td class="codes"><pre class="brush: clojure">(def tab-area (label &quot;nth selected&quot;))</pre></td></tr><tr><td class="docs"><p>Initial content for a main frame.</p>
-</td><td class="codes"><pre class="brush: clojure">(def main-frame-content
-  (left-right-split (scrollable notes-listbox) tab-area :divider-location 1/4))</pre></td></tr><tr><td class="docs"><h2>GUI itself</h2>
+</td><td class="codes"><pre class="brush: clojure">(def tab-area (label &quot;nth selected&quot;))</pre></td></tr><tr><td class="docs"><p>Tab with a note to tab converter.</p>
+</td><td class="codes"><pre class="brush: clojure">(def note-to-tab-window
+  (left-right-split (scrollable notes-listbox) tab-area :divider-location 1/4))</pre></td></tr><tr><td class="docs"><p>Submit button.</p>
+</td><td class="codes"><pre class="brush: clojure">(def submit (button :text &quot;Choose file&quot;))</pre></td></tr><tr><td class="docs"><p>Text for a tune's tab.</p>
+</td><td class="codes"><pre class="brush: clojure">(def tune-tab-area (text :text &quot;nothing&quot; :multi-line? true :editable? false))</pre></td></tr><tr><td class="docs"><p>Tab with a file to tab converter.</p>
+</td><td class="codes"><pre class="brush: clojure">(def file-to-tab-window
+  (top-bottom-split submit (scrollable tune-tab-area) :divider-location 1/5))</pre></td></tr><tr><td class="docs"><p>Root element for a frame.</p>
+</td><td class="codes"><pre class="brush: clojure">(def container (tabbed-panel
+                :tabs [{:title &quot;Note-to-Tab&quot;
+                        :tip &quot;Translate a note to a whistle tab.&quot;
+                        :content note-to-tab-window}
+                       {:title &quot;File-to-Tab&quot;
+                        :tip &quot;Creates a tab for a given ABC-file.&quot;
+                        :content file-to-tab-window}]))</pre></td></tr><tr><td class="docs"><h2>GUI itself</h2>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn gui []
   (invoke-later
@@ -3202,13 +3214,25 @@ TODO show notes in a correct 'whistle' order</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Shows a GUI with possibility to debug it.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn show-main-frame
   []
-  (display main-frame-content)
+  (native!)
+  (display container)
   (activate-listeners)
   (selection! notes-listbox &quot;D&quot;)
-  (show! main-frame))</pre></td></tr><tr><td class="docs"><p>Listens for a click on a submit button</p>
+  (show! main-frame))</pre></td></tr><tr><td class="docs"><p>Chooses an ABC file for consecutive tab generation.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn file-explorer
+  []
+  (choose-file
+   main-frame
+   :type :open
+   :filters [[&quot;ABC&quot; [&quot;abc&quot;]]]
+   :success-fn
+   (fn [fc file]
+     (text!
+      tune-tab-area
+      (abc-&gt;tab [(.getAbsolutePath file)] &quot;[ ]&quot;)))))</pre></td></tr><tr><td class="docs"><p>Listens for a click on a submit button</p>
 </td><td class="codes"><pre class="brush: clojure">(defn activate-submit-listener
   []
-  (listen submit :action (fn [e] (alert e &quot;Ok!&quot;))))</pre></td></tr><tr><td class="docs"><p>Listens to a change of a selection in a notes list.</p>
+  (listen submit :action (fn [e] (file-explorer))))</pre></td></tr><tr><td class="docs"><p>Listens to a change of a selection in a notes list.</p>
 
 <p>TODO display some graphics, not a vector</p>
 </td><td class="codes"><pre class="brush: clojure">(defn activate-notes-list-listener
