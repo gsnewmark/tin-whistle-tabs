@@ -16,7 +16,7 @@ Alternatively, it could be downloaded from [here](https://github.com/downloads/g
 
 ### Definitions
 
-Supported notes are: ** D E F# G A B C C# d e f# g a b c c# **
+Supported notes are: *D E F# G A B C C# d e f# g a b c c#*
 
 Fingering chart are represented as a vectors with 7 elements: first six
 correspond to a whistle's holes (first element is an upper hole), their  values
